@@ -1,14 +1,24 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.hunglemmo.sanvoucher',
-  appName: 'Săn Voucher',
+  // Giữ nguyên mã định danh mới này, đây là phần quan trọng nhất
+  appId: 'com.hunglemmo.sanvoucher.rewards',
+  
+  // Sử dụng tên mới rõ ràng hơn để gửi cho Google Play
+  appName: 'Săn Voucher - Đổi Thưởng',
+  
+  // Thư mục chứa code web đã được build
   webDir: 'build',
-  // --- THÊM KHỐI CẤU HÌNH PLUGIN VÀO ĐÂY ---
+  
+  // Cấu hình này quan trọng để Capacitor hoạt động đúng trên Android
+  server: {
+    androidScheme: 'https'
+  },
+
+  // Giữ nguyên cấu hình plugin GoogleAuth vì bạn vẫn dùng chung một dự án Google Cloud
   plugins: {
     GoogleAuth: {
       scopes: [ "profile", "email" ],
-      // Đây là Web Client ID của bạn
       serverClientId: "434123508352-7i91tojntp9bl531t67iosath3fp2hl5.apps.googleusercontent.com",
       forceCodeForRefreshToken: true
     }
