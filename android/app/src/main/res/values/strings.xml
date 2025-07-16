@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Săn Voucher</string>
+    <string name="title_activity_main">Săn Voucher</string>
+    <string name="package_name">com.hunglemmo.sanvoucher</string>
+    <string name="custom_url_scheme">com.hunglemmo.sanvoucher</string>
+    <string name="server_client_id">434123508352-7i91tojntp9bl531t67iosath3fp2hl5.apps.googleusercontent.com</string>
+</resources>

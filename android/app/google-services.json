@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "434123508352",
+    "project_id": "san-voucher",
+    "storage_bucket": "san-voucher.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434123508352:android:77809a391cfe2817faf465",
+        "android_client_info": {
+          "package_name": "com.hunglemmo.sanvoucher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "434123508352-tm7j7c0lh7d54riss1ddlvu1vhb1omkl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hunglemmo.sanvoucher",
+            "certificate_hash": "3b4b48cfe392b8377bf7ff723db1f66726640f46"
+          }
+        },
+        {
+          "client_id": "434123508352-7i91tojntp9bl531t67iosath3fp2hl5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCa8le05ZLbOvd5M-elEZv2Ej5IvMvyiTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "434123508352-7i91tojntp9bl531t67iosath3fp2hl5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
