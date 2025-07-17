@@ -92,7 +92,7 @@ const AdSimulationModal = ({ onReward, onClose }) => {
 };
 
 // Component RedemptionModal (MỚI)
-const RedemptionModal = ({ onClose, userCoins, showNotification, onRedemptionSuccess }) => {
+const RedemptionModal = ({ onClose, userCoins, showNotification, onRedemptionSuccess, backendUrl }) => {
     const [cardType, setCardType] = useState('Viettel');
     const [amount, setAmount] = useState(10000); // Mệnh giá VNĐ
     const [isLoading, setIsLoading] = useState(false);
@@ -116,7 +116,7 @@ const RedemptionModal = ({ onClose, userCoins, showNotification, onRedemptionSuc
             const token = localStorage.getItem('authToken');
             if (!token) throw new Error("Vui lòng đăng nhập lại.");
 
-            const response = await fetch(`/api/redeem-card`, {
+            const response = await fetch(`${backendUrl}/api/redeem-card`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -174,7 +174,7 @@ const RedemptionModal = ({ onClose, userCoins, showNotification, onRedemptionSuc
 };
 
 // Component RedemptionHistoryPage (MỚI)
-const RedemptionHistoryPage = ({ showNotification }) => {
+const RedemptionHistoryPage = ({ showNotification, backendUrl }) => {
     const [history, setHistory] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -184,7 +184,7 @@ const RedemptionHistoryPage = ({ showNotification }) => {
             try {
                 const token = localStorage.getItem('authToken');
                 if (!token) throw new Error("Vui lòng đăng nhập lại.");
-                const response = await fetch('/api/redemption-history', {
+                const response = await fetch(`${backendUrl}/api/redemption-history`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const result = await response.json();
@@ -197,7 +197,7 @@ const RedemptionHistoryPage = ({ showNotification }) => {
             }
         };
         fetchHistory();
-    }, [showNotification]);
+    }, [showNotification, backendUrl]);
 
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text);
@@ -235,7 +235,7 @@ const RedemptionHistoryPage = ({ showNotification }) => {
 };
 
 
-const LoginPage = ({ onLogin, showNotification }) => {
+const LoginPage = ({ onLogin, showNotification, backendUrl }) => {
     const [isLoginView, setIsLoginView] = useState(true);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -249,7 +249,7 @@ const LoginPage = ({ onLogin, showNotification }) => {
             let response;
             let result;
             if (isLoginView) {
-                response = await fetch(`/api/login`, {
+                response = await fetch(`${backendUrl}/api/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password }),
@@ -260,7 +260,7 @@ const LoginPage = ({ onLogin, showNotification }) => {
                 onLogin(result); // Gửi cả object result (chứa token và user)
             } else {
                 if (password !== confirmPassword) { throw new Error('Mật khẩu nhập lại không khớp.'); }
-                response = await fetch(`/api/register`, {
+                response = await fetch(`${backendUrl}/api/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password, referralCode }),
@@ -280,7 +280,7 @@ const LoginPage = ({ onLogin, showNotification }) => {
     const handleGoogleSuccess = async (token) => {
         setIsLoading(true);
         try {
-            const res = await fetch(`/api/auth/google`, {
+            const res = await fetch(`${backendUrl}/api/auth/google`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ token: token }),
@@ -439,8 +439,8 @@ const HomePage = ({ products, isLoading, error, platformFilter, setPlatformFilte
 
 // --- Component App chính ---
 export default function App() {
-    // Không cần biến backendUrl nữa vì đã có proxy
-    // const backendUrl = 'https://affiliate-backend-v2.vercel.app';
+    // SỬA LẠI Ở ĐÂY: Khai báo URL tuyệt đối của backend
+    const backendUrl = 'https://affiliate-backend-v2.vercel.app';
     
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
@@ -471,9 +471,10 @@ export default function App() {
             setIsLoading(true);
             setError(null);
             try {
+                // SỬA LẠI Ở ĐÂY: Dùng backendUrl
                 const [productsResponse, categoriesResponse] = await Promise.all([
-                    fetch(`/api/offers?limit=20&page=1`),
-                    fetch(`/api/categories`)
+                    fetch(`${backendUrl}/api/offers?limit=20&page=1`),
+                    fetch(`${backendUrl}/api/categories`)
                 ]);
 
                 if (!productsResponse.ok || !categoriesResponse.ok) {
@@ -496,14 +497,15 @@ export default function App() {
             }
         };
         fetchInitialData();
-    }, []);
+    }, [backendUrl]); // Thêm backendUrl vào dependency array
 
     const loadMoreProducts = async () => {
         if (isLoadingMore || !hasMore) return;
         setIsLoadingMore(true);
         const nextPage = page + 1;
         try {
-            const response = await fetch(`/api/offers?limit=20&page=${nextPage}`);
+            // SỬA LẠI Ở ĐÂY: Dùng backendUrl
+            const response = await fetch(`${backendUrl}/api/offers?limit=20&page=${nextPage}`);
             const data = await response.json();
             const newProducts = data.data || [];
             setProducts(prevProducts => [...prevProducts, ...newProducts]);
@@ -550,7 +552,8 @@ export default function App() {
             const token = localStorage.getItem('authToken');
             if (!token) throw new Error("Vui lòng đăng nhập lại.");
             
-            const response = await fetch(`/api/user/claim-daily`, {
+            // SỬA LẠI Ở ĐÂY: Dùng backendUrl
+            const response = await fetch(`${backendUrl}/api/user/claim-daily`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -586,7 +589,8 @@ export default function App() {
             const token = localStorage.getItem('authToken');
             if (!token) throw new Error("Vui lòng đăng nhập lại.");
             
-            const response = await fetch(`/api/user/add-coins`, {
+            // SỬA LẠI Ở ĐÂY: Dùng backendUrl
+            const response = await fetch(`${backendUrl}/api/user/add-coins`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -634,11 +638,11 @@ export default function App() {
             case 'category':
                 return <CategoryPage availablePlatforms={availablePlatforms} setPlatformFilter={setPlatformFilter} setCurrentPage={setCurrentPage} />;
             case 'history':
-                if (!isAuthenticated) return <LoginPage onLogin={handleLogin} showNotification={showNotification} />;
-                return <RedemptionHistoryPage showNotification={showNotification} />;
+                if (!isAuthenticated) return <LoginPage onLogin={handleLogin} showNotification={showNotification} backendUrl={backendUrl} />;
+                return <RedemptionHistoryPage showNotification={showNotification} backendUrl={backendUrl} />;
             case 'profile':
                 if (!isAuthenticated) {
-                    return <LoginPage onLogin={handleLogin} showNotification={showNotification} />;
+                    return <LoginPage onLogin={handleLogin} showNotification={showNotification} backendUrl={backendUrl} />;
                 }
                 return <ProfilePage 
                     user={currentUser} 
@@ -680,6 +684,7 @@ export default function App() {
                     userCoins={coins} 
                     showNotification={showNotification} 
                     onRedemptionSuccess={(newCoinTotal) => setCoins(newCoinTotal)} 
+                    backendUrl={backendUrl}
                 />}
                 
                 <main className="pb-20">
