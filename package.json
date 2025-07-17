@@ -6,7 +6,7 @@
     "@capacitor/android": "^7.4.1",
     "@capacitor/cli": "^7.4.2",
     "@capacitor/core": "^7.4.2",
-    "@codetrix-studio/capacitor-google-auth": "file:../CapacitorGoogleAuth-master/CapacitorGoogleAuth-master",
+    "@codetrix-studio/capacitor-google-auth": "^3.4.0-rc.4",
     "@react-oauth/google": "^0.12.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
