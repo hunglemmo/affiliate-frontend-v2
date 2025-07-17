@@ -439,6 +439,9 @@ const HomePage = ({ products, isLoading, error, platformFilter, setPlatformFilte
 
 // --- Component App chính ---
 export default function App() {
+    // Không cần biến backendUrl nữa vì đã có proxy
+    // const backendUrl = 'https://affiliate-backend-v2.vercel.app';
+    
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
     const [currentPage, setCurrentPage] = useState('home');
@@ -615,9 +618,13 @@ export default function App() {
             url: "https://play.google.com/store/apps/details?id=com.hunglemmo.sanvoucher.rewards",
         };
         try {
-            await navigator.share(shareData);
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                throw new Error('Web Share API not supported.');
+            }
         } catch (err) {
-            navigator.clipboard.writeText(`Tải app Săn Voucher - Đổi Thưởng và nhập mã ${code} nhé!`);
+            navigator.clipboard.writeText(`Tải app Săn Voucher - Đổi Thưởng và nhập mã ${code} nhé! Link: ${shareData.url}`);
             showNotification("Đã sao chép link giới thiệu!", 'info');
         }
     };
@@ -627,6 +634,7 @@ export default function App() {
             case 'category':
                 return <CategoryPage availablePlatforms={availablePlatforms} setPlatformFilter={setPlatformFilter} setCurrentPage={setCurrentPage} />;
             case 'history':
+                if (!isAuthenticated) return <LoginPage onLogin={handleLogin} showNotification={showNotification} />;
                 return <RedemptionHistoryPage showNotification={showNotification} />;
             case 'profile':
                 if (!isAuthenticated) {
