@@ -671,7 +671,7 @@ export default function App() {
         }
     };
 
-    const GOOGLE_CLIENT_ID = "434123508352-7i91tojntp9bl531t67iosath3fp2hl5.apps.googleusercontent.com";
+    const GOOGLE_CLIENT_ID = "991037706084-dhjn52nv5tpjnsesjhnd2th22guppopb.apps.googleusercontent.com";
 
     return (
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
